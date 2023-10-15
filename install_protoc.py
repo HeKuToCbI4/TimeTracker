@@ -3,7 +3,7 @@ import pathlib
 import zipfile
 
 
-PROTOC_URL = 'https://github.com/protocolbuffers/protobuf/releases/download/v22.2/protoc-22.2-win32.zip'
+PROTOC_URL = 'https://github.com/protocolbuffers/protobuf/releases/download/v24.4/protoc-24.4-win64.zip'
 FILEDIR = pathlib.Path(__file__).parent
 PROTOC_ZIP_PATH = FILEDIR / 'protoc.zip'
 PROTOC_TARGET_DIR = FILEDIR / 'protoc'

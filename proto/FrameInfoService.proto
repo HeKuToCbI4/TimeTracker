@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "FrameInfo.proto";
+
+package telemetry;
+
+message StreamSubscribeRequest {
+  string consumer_id = 1;
+  int32 ttl = 10;
+}
+
+message StreamUnsubscribeRequest {
+  string consumer_id = 1;
+}
+
+message StreamUnsubscribeResponse {
+  int32 status_code = 1;
+  string message = 10;
+}
+
+service FrameInfoService{
+  rpc FrameInfoStream(StreamSubscribeRequest) returns (stream telemetry.TimeFrameInfo) {}
+  rpc FrameInfoUnsubscribe(StreamUnsubscribeRequest) returns (StreamUnsubscribeResponse) {}
+}

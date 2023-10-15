@@ -1,6 +1,0 @@
-[requires]
-sqlite3/3.41.1
-
-[generators]
-CMakeDeps
-CMakeToolchain
