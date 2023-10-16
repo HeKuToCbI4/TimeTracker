@@ -18,8 +18,11 @@ namespace activity_monitor {
         std::wstring *window_title;
         std::wstring *process_executable_path;
         uint64_t utc_timestamp;
+
         ActivitySnapshot();
-        ActivitySnapshot(wchar_t* &window_title, wchar_t* &process_executable_path);
+
+        ActivitySnapshot(wchar_t *&window_title, wchar_t *&process_executable_path);
+
         ~ActivitySnapshot();
     };
 

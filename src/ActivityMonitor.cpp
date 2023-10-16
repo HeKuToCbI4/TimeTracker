@@ -18,8 +18,7 @@ namespace activity_monitor {
             return nullptr;
         }
         auto textLen = GetWindowTextLength(foregroundWindowHandle);
-        if (!textLen)
-        {
+        if (!textLen) {
             titleBuf = nullptr;
         } else {
             titleBuf = new wchar_t[textLen];
@@ -32,8 +31,7 @@ namespace activity_monitor {
             }
         }
         DWORD pid;
-        if (!GetWindowThreadProcessId(foregroundWindowHandle, &pid))
-        {
+        if (!GetWindowThreadProcessId(foregroundWindowHandle, &pid)) {
             std::cout << "Problem getting pid;" << std::endl;
         } else {
             auto activeWindowProcessHandle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,

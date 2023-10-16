@@ -6,7 +6,6 @@ package telemetry;
 
 message StreamSubscribeRequest {
   string consumer_id = 1;
-  int32 ttl = 10;
 }
 
 message StreamUnsubscribeRequest {
@@ -19,6 +18,6 @@ message StreamUnsubscribeResponse {
 }
 
 service FrameInfoService{
-  rpc FrameInfoStream(StreamSubscribeRequest) returns (stream telemetry.TimeFrameInfo) {}
-  rpc FrameInfoUnsubscribe(StreamUnsubscribeRequest) returns (StreamUnsubscribeResponse) {}
+  rpc Subscribe(StreamSubscribeRequest) returns (stream telemetry.TimeFrameInfo) {}
+  rpc Unsubscribe(StreamUnsubscribeRequest) returns (StreamUnsubscribeResponse) {}
 }
