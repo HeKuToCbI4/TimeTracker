@@ -15,7 +15,7 @@ namespace activity_monitor {
     }
 
     ActivitySnapshot::ActivitySnapshot(wchar_t *&window_title, wchar_t *&process_executable_path) {
-        this->id = this->last_frame++;
+        this->id = last_frame++;
         this->process_executable_path = new std::wstring(process_executable_path);
         this->window_title = new std::wstring(window_title);
         using namespace std::chrono;

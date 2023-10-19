@@ -9,10 +9,9 @@
 #include <string>
 
 namespace activity_monitor {
-
+    static uint64_t last_frame = 0;
     class ActivitySnapshot {
     private:
-        uint64_t last_frame = 0;
     public:
         uint64_t id;
         std::wstring *window_title;

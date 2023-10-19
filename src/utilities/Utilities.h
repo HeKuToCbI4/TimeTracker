@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <string>
 
+
 #ifndef TIMETRACKER_UTILITIES_H
 #define TIMETRACKER_UTILITIES_H
 
@@ -11,7 +12,7 @@ namespace utilities {
 
     class Utilities {
     public:
-        // Convert a wide Unicode String to an UTF8 string
+        // Convert a wide Unicode String to a string
         static std::string utf8_encode(const std::wstring &wstr);
 
         // Convert an UTF8 string to a wide Unicode String

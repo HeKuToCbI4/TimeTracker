@@ -5,9 +5,7 @@
 #include "ActivityMonitor.h"
 
 namespace activity_monitor {
-    ActivityMonitor::ActivityMonitor() {
-
-    }
+    ActivityMonitor::ActivityMonitor() = default;
 
     ActivitySnapshot *ActivityMonitor::getSnapshot() {
         // pointers to returned values
