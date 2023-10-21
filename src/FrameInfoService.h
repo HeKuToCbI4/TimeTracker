@@ -12,8 +12,9 @@
 #include <thread>
 
 #include "ActivityMonitor.h"
-#include "src/proto/FrameInfo.pb.h"
-#include "src/proto/FrameInfoService.grpc.pb.h"
+#include "src/protobuf/proto/FrameInfo.pb.h"
+#include "src/protobuf/proto/FrameInfoService.pb.h"
+#include "src/protobuf/proto/FrameInfoService.grpc.pb.h"
 #include "utilities/Utilities.h"
 
 #ifndef TIMETRACKER_FRAMEINFOSERVICE_H

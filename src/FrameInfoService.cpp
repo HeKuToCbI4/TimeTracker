@@ -43,6 +43,10 @@ Status FrameInfoServiceImpl::Subscribe(ServerContext *context, const StreamSubsc
 
 void FrameInfoServiceImpl::SendFrameInfo() {
     auto snapshot = activity_monitor::ActivityMonitor::getSnapshot();
+    if (snapshot == nullptr){
+        std::cout << "Error getting snapshot data" << std::endl;
+        return;
+    }
     auto frameInfo = telemetry::TimeFrameInfo();
     frameInfo.set_id(snapshot->id);
     if (snapshot->window_title != nullptr) {

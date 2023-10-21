@@ -27,7 +27,12 @@ find_package(gRPC CONFIG REQUIRED)
 #message("Boost LIBRARIES: ${Boost_LIBRARIES}")
 
 add_subdirectory(src/utilities)
-add_subdirectory(src/proto)
+add_subdirectory(src/protobuf)
+
+include_directories(
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
+#include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(TimeTracker
         src/main.cpp
@@ -38,9 +43,6 @@ add_executable(TimeTracker
         src/FrameInfoService.cpp
         src/FrameInfoService.h
 )
-
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-#include_directories(${Boost_INCLUDE_DIRS})
 
 target_link_libraries(TimeTracker
         TimeTracker::proto

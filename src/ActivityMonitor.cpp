@@ -9,16 +9,14 @@ namespace activity_monitor {
 
     ActivitySnapshot *ActivityMonitor::getSnapshot() {
         // pointers to returned values
-        wchar_t *processExecutablePath;
-        wchar_t *titleBuf;
+        wchar_t *processExecutablePath = nullptr;
+        wchar_t *titleBuf = nullptr;
         auto foregroundWindowHandle = GetForegroundWindow();
         if (foregroundWindowHandle == INVALID_HANDLE_VALUE) {
             return nullptr;
         }
         auto textLen = GetWindowTextLength(foregroundWindowHandle);
-        if (!textLen) {
-            titleBuf = nullptr;
-        } else {
+        if (textLen)  {
             titleBuf = new wchar_t[textLen];
             if (GetWindowTextW(foregroundWindowHandle, titleBuf, MAX_STR_LENGTH)) {
                 std::wcout << titleBuf << std::endl;

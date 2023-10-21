@@ -17,7 +17,11 @@ namespace activity_monitor {
     ActivitySnapshot::ActivitySnapshot(wchar_t *&window_title, wchar_t *&process_executable_path) {
         this->id = last_frame++;
         this->process_executable_path = new std::wstring(process_executable_path);
-        this->window_title = new std::wstring(window_title);
+        if (window_title != nullptr) {
+            this->window_title = new std::wstring(window_title);
+        } else {
+            this->window_title = new std::wstring(L"");
+        }
         using namespace std::chrono;
         this->utc_timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     }
