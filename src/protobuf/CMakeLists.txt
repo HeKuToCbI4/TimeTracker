@@ -33,7 +33,10 @@ target_link_libraries(proto
         gRPC::grpc++
 )
 
-target_include_directories(proto PUBLIC $<BUILD_INTERFACE:${PROTO_BINARY_DIR}>)
+target_include_directories(
+        proto
+        PUBLIC $<BUILD_INTERFACE:${PROTO_BINARY_DIR}>
+)
 
 # get plugin location
 GET_TARGET_PROPERTY(grpc_cpp_plugin_location gRPC::grpc_cpp_plugin LOCATION)
