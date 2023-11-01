@@ -30,7 +30,9 @@ private:
     std::mutex map_guard_mutex;
     unsigned long afk_timeout = 15*60*1000;
     int reporting_interval = 5000;
-
+    // ctrl+c will set this to true. (or any other sigterm signal)
+    // set this from outside.
+    bool interrupted = false;
 public:
     Status Unsubscribe(ServerContext *context, const StreamUnsubscribeRequest *request,
                        telemetry::StreamUnsubscribeResponse *response) override;
@@ -40,9 +42,10 @@ public:
 
     bool IsAfk();
 
-    void SendFrameInfo();
+    void SendFrameInfo(bool isAfk);
 
     void RunServer(const std::string &server_address = "127.0.0.1:50051");
+    void StopServer();
 
 };
 

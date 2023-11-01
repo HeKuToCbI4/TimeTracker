@@ -17,7 +17,9 @@ namespace activity_monitor {
     public:
         ActivityMonitor();
 
-        static ActivitySnapshot *getSnapshot();
+        static ActivitySnapshot *GetSnapshot();
+
+        static ActivitySnapshot *GetAfkSnapshot();
     };
 
 } // activity_monitor

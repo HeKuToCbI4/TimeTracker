@@ -21,6 +21,7 @@ namespace activity_monitor {
         ActivitySnapshot();
 
         ActivitySnapshot(wchar_t *&window_title, wchar_t *&process_executable_path);
+        ActivitySnapshot(const wchar_t *&window_title, const wchar_t *&process_executable_path);
 
         ~ActivitySnapshot();
     };

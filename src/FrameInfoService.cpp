@@ -41,9 +41,15 @@ Status FrameInfoServiceImpl::Subscribe(ServerContext *context, const StreamSubsc
     return status;
 }
 
-void FrameInfoServiceImpl::SendFrameInfo() {
-    auto snapshot = activity_monitor::ActivityMonitor::getSnapshot();
-    if (snapshot == nullptr){
+void FrameInfoServiceImpl::SendFrameInfo(bool isAfk) {
+    activity_monitor::ActivitySnapshot * snapshot;
+    if (!isAfk) {
+        snapshot = activity_monitor::ActivityMonitor::GetSnapshot();
+    } else
+    {
+        snapshot = activity_monitor::ActivityMonitor::GetAfkSnapshot();
+    }
+    if (snapshot == nullptr) {
         std::cout << "Error getting snapshot data" << std::endl;
         return;
     }
@@ -90,8 +96,8 @@ void FrameInfoServiceImpl::RunServer(const std::string &server_address) {
 
     auto server = builder.BuildAndStart();
     std::cout << "Server started and waiting for connections on " << server_address << std::endl;
-    while (true) {
-        if (!this->IsAfk()) { this->SendFrameInfo(); }
+    while (!this->interrupted) {
+            this->SendFrameInfo(this->IsAfk());
         std::this_thread::sleep_for(std::chrono::milliseconds(this->reporting_interval));
     }
 }
@@ -103,7 +109,12 @@ bool FrameInfoServiceImpl::IsAfk() {
     auto elapsed = tick_count - last_input.dwTime;
     std::cout << "Time elapsed since last input [ms]: " << elapsed << std::endl;
     if (elapsed > this->afk_timeout) {
+        std::cout << "AFK detected!" << std::endl;
         return true;
     }
     return false;
+}
+void FrameInfoServiceImpl::StopServer() {
+    auto guard = std::lock_guard<std::mutex>(this->map_guard_mutex);
+    this->interrupted = true;
 }

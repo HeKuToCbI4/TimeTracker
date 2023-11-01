@@ -7,7 +7,7 @@
 namespace activity_monitor {
     ActivityMonitor::ActivityMonitor() = default;
 
-    ActivitySnapshot *ActivityMonitor::getSnapshot() {
+    ActivitySnapshot *ActivityMonitor::GetSnapshot() {
         // pointers to returned values
         wchar_t *processExecutablePath = nullptr;
         wchar_t *titleBuf = nullptr;
@@ -16,7 +16,7 @@ namespace activity_monitor {
             return nullptr;
         }
         auto textLen = GetWindowTextLength(foregroundWindowHandle);
-        if (textLen)  {
+        if (textLen) {
             titleBuf = new wchar_t[textLen];
             if (GetWindowTextW(foregroundWindowHandle, titleBuf, MAX_STR_LENGTH)) {
                 std::wcout << titleBuf << std::endl;
@@ -50,4 +50,9 @@ namespace activity_monitor {
         // CloseHandle(foregroundWindowHandle);
         return new ActivitySnapshot(titleBuf, processExecutablePath);
     }
-} // activity_monitor
+
+    ActivitySnapshot *ActivityMonitor::GetAfkSnapshot() {
+        auto AFK = L"AFK";
+        return new ActivitySnapshot(AFK, AFK);
+    }
+}// namespace activity_monitor

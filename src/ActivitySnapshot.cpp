@@ -26,6 +26,18 @@ namespace activity_monitor {
         this->utc_timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     }
 
+    ActivitySnapshot::ActivitySnapshot(const wchar_t *&window_title, const wchar_t *&process_executable_path) {
+        this->id = last_frame++;
+        this->process_executable_path = new std::wstring(process_executable_path);
+        if (window_title != nullptr) {
+            this->window_title = new std::wstring(window_title);
+        } else {
+            this->window_title = new std::wstring(L"");
+        }
+        using namespace std::chrono;
+        this->utc_timestamp = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    }
+
     ActivitySnapshot::~ActivitySnapshot() {
         delete[] this->process_executable_path;
         delete[] this->window_title;
