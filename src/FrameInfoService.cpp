@@ -31,13 +31,12 @@ Status FrameInfoServiceImpl::Subscribe(ServerContext *context, const StreamSubsc
     if (context->IsCancelled()) {
         status = Status::CANCELLED;
     }
-    this->map_guard_mutex.lock();
+    auto guard = std::lock_guard(this->map_guard_mutex);
     if (this->stopRequestedMap.at(consumer_id)) {
         status = Status::OK;
     }
     this->stopRequestedMap.erase(consumer_id);
     this->writersMap.erase(consumer_id);
-    this->map_guard_mutex.unlock();
     return status;
 }
 
@@ -74,7 +73,7 @@ void FrameInfoServiceImpl::SendFrameInfo(bool isAfk) {
         if (writer == nullptr) {
             this->stopRequestedMap[consumer_id] = true;
         }
-        std::cout << "Sending frame: " << frameInfo.SerializeAsString() << std::endl;
+        std::cout << "Sending frame: " << frameInfo.id() << std::endl;
         try {
             if (!writer->Write(frameInfo)) {
                 std::cout << "The writer for client " << consumer_id << " has been disconnected." << std::endl;
@@ -117,4 +116,7 @@ bool FrameInfoServiceImpl::IsAfk() {
 void FrameInfoServiceImpl::StopServer() {
     auto guard = std::lock_guard<std::mutex>(this->map_guard_mutex);
     this->interrupted = true;
+    for (auto it = this->stopRequestedMap.begin(); it!=this->stopRequestedMap.end(); it++){
+        it->second = true;
+    }
 }

@@ -19,7 +19,7 @@ namespace activity_monitor {
         if (textLen) {
             titleBuf = new wchar_t[textLen];
             if (GetWindowTextW(foregroundWindowHandle, titleBuf, MAX_STR_LENGTH)) {
-                std::wcout << titleBuf << std::endl;
+                // std::wcout << titleBuf << std::endl;
             } else {
                 std::cout << "Problem getting title;" << std::endl;
                 delete[] titleBuf;
@@ -39,7 +39,7 @@ namespace activity_monitor {
             } else {
                 processExecutablePath = new wchar_t[MAX_STR_LENGTH];
                 if (GetProcessImageFileNameW(activeWindowProcessHandle, processExecutablePath, MAX_STR_LENGTH)) {
-                    std::wcout << processExecutablePath << std::endl;
+                    // std::wcout << processExecutablePath << std::endl;
                 } else {
                     delete[] processExecutablePath;
                     processExecutablePath = nullptr;

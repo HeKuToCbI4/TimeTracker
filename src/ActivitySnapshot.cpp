@@ -3,6 +3,7 @@
 //
 
 #include "ActivitySnapshot.h"
+
 #include <chrono>
 
 namespace activity_monitor {
@@ -16,7 +17,11 @@ namespace activity_monitor {
 
     ActivitySnapshot::ActivitySnapshot(wchar_t *&window_title, wchar_t *&process_executable_path) {
         this->id = last_frame++;
-        this->process_executable_path = new std::wstring(process_executable_path);
+        if (process_executable_path != nullptr) {
+            this->process_executable_path = new std::wstring(process_executable_path);
+        } else {
+            this->process_executable_path = new std::wstring(L"");
+        }
         if (window_title != nullptr) {
             this->window_title = new std::wstring(window_title);
         } else {
@@ -42,4 +47,4 @@ namespace activity_monitor {
         delete[] this->process_executable_path;
         delete[] this->window_title;
     }
-} // activity_monitor
+}// namespace activity_monitor

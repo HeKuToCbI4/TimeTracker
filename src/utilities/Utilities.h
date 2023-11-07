@@ -1,6 +1,7 @@
 //
 // Created by Nikita on 10/16/23.
 //
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <string>
 

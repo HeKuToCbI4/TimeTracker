@@ -1,9 +1,7 @@
 #include <csignal>
-
 #include <thread>
 
 #include "FrameInfoService.h"
-//#include <boost/log/trivial.hpp>
 
 volatile sig_atomic_t stopRequested;
 
