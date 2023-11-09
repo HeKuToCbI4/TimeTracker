@@ -42,7 +42,7 @@ public:
 
     bool IsAfk();
 
-    void SendFrameInfo(bool isAfk);
+    void SendFrameInfo(bool isAfk, bool last=false);
 
     void RunServer(const std::string &server_address = "127.0.0.1:50051");
     void StopServer();

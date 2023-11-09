@@ -29,10 +29,12 @@ Status FrameInfoServiceImpl::Subscribe(ServerContext *context, const StreamSubsc
     std::cout << "stop requested for " << consumer_id << " channel." << std::endl;
     auto status = Status(StatusCode::UNKNOWN, "Error happened during Subscribe, graceful termination is not completed!");
     if (context->IsCancelled()) {
+        std::cout << "Sending CANCELLED status as stop was requested gracefully." << std::endl;
         status = Status::CANCELLED;
     }
     auto guard = std::lock_guard(this->map_guard_mutex);
     if (this->stopRequestedMap.at(consumer_id)) {
+        std::cout << "Sending OK status as stop was requested gracefully." << std::endl;
         status = Status::OK;
     }
     this->stopRequestedMap.erase(consumer_id);
@@ -40,12 +42,11 @@ Status FrameInfoServiceImpl::Subscribe(ServerContext *context, const StreamSubsc
     return status;
 }
 
-void FrameInfoServiceImpl::SendFrameInfo(bool isAfk) {
-    activity_monitor::ActivitySnapshot * snapshot;
+void FrameInfoServiceImpl::SendFrameInfo(bool isAfk, bool last) {
+    activity_monitor::ActivitySnapshot *snapshot;
     if (!isAfk) {
         snapshot = activity_monitor::ActivityMonitor::GetSnapshot();
-    } else
-    {
+    } else {
         snapshot = activity_monitor::ActivityMonitor::GetAfkSnapshot();
     }
     if (snapshot == nullptr) {
@@ -67,15 +68,18 @@ void FrameInfoServiceImpl::SendFrameInfo(bool isAfk) {
     frameInfo.set_id(snapshot->id);
     frameInfo.set_utc_timestamp(snapshot->utc_timestamp);
     std::lock_guard<std::mutex> guard(this->map_guard_mutex);
+    std::cout << "Sending frame: " << frameInfo.id() << std::endl;
     for (auto it = this->writersMap.begin(); it != this->writersMap.end(); it++) {
         auto consumer_id = it->first;
         auto writer = it->second;
         if (writer == nullptr) {
             this->stopRequestedMap[consumer_id] = true;
         }
-        std::cout << "Sending frame: " << frameInfo.id() << std::endl;
         try {
-            if (!writer->Write(frameInfo)) {
+            if (last) {
+                writer->WriteLast(frameInfo, grpc::WriteOptions());
+                this->stopRequestedMap[consumer_id] = true;
+            } else if (!writer->Write(frameInfo)) {
                 std::cout << "The writer for client " << consumer_id << " has been disconnected." << std::endl;
                 this->stopRequestedMap[consumer_id] = true;
             }
@@ -96,9 +100,11 @@ void FrameInfoServiceImpl::RunServer(const std::string &server_address) {
     auto server = builder.BuildAndStart();
     std::cout << "Server started and waiting for connections on " << server_address << std::endl;
     while (!this->interrupted) {
-            this->SendFrameInfo(this->IsAfk());
+        this->SendFrameInfo(this->IsAfk());
         std::this_thread::sleep_for(std::chrono::milliseconds(this->reporting_interval));
     }
+    this->SendFrameInfo(this->IsAfk(), true);
+    std::cout << "Ending main loop of RunServer" << std::endl;
 }
 bool FrameInfoServiceImpl::IsAfk() {
     LASTINPUTINFO last_input;
@@ -116,7 +122,8 @@ bool FrameInfoServiceImpl::IsAfk() {
 void FrameInfoServiceImpl::StopServer() {
     auto guard = std::lock_guard<std::mutex>(this->map_guard_mutex);
     this->interrupted = true;
-    for (auto it = this->stopRequestedMap.begin(); it!=this->stopRequestedMap.end(); it++){
+    for (auto it = this->stopRequestedMap.begin(); it != this->stopRequestedMap.end(); it++) {
+        std::cout << "Setting stop thread for " << it->first << std::endl;
         it->second = true;
     }
 }
