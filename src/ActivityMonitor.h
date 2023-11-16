@@ -2,10 +2,10 @@
 // Created by Nikita on 04/04/23.
 //
 #include "ActivitySnapshot.h"
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <Psapi.h>
 #include <iostream>
+#include "winver.h"
 
 #ifndef TIMETRACKER_ACTIVITYMONITOR_H
 #define TIMETRACKER_ACTIVITYMONITOR_H

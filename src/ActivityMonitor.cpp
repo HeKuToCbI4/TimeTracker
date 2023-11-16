@@ -30,7 +30,7 @@ namespace activity_monitor {
         if (!GetWindowThreadProcessId(foregroundWindowHandle, &pid)) {
             std::cout << "Problem getting pid;" << std::endl;
         } else {
-            auto activeWindowProcessHandle = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,
+            auto activeWindowProcessHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
                                                          FALSE,
                                                          pid);
 
@@ -38,8 +38,9 @@ namespace activity_monitor {
                 processExecutablePath = nullptr;
             } else {
                 processExecutablePath = new wchar_t[MAX_STR_LENGTH];
-                if (GetProcessImageFileNameW(activeWindowProcessHandle, processExecutablePath, MAX_STR_LENGTH)) {
-                    // std::wcout << processExecutablePath << std::endl;
+                DWORD size = MAX_STR_LENGTH;
+                if (QueryFullProcessImageNameW(activeWindowProcessHandle, 0, processExecutablePath, &size)) {
+//                    std::wcout << processExecutablePath << " " << size <<  std::endl;
                 } else {
                     delete[] processExecutablePath;
                     processExecutablePath = nullptr;
@@ -47,7 +48,6 @@ namespace activity_monitor {
                 CloseHandle(activeWindowProcessHandle);
             }
         }
-        // CloseHandle(foregroundWindowHandle);
         return new ActivitySnapshot(titleBuf, processExecutablePath);
     }
 

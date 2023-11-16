@@ -19,6 +19,7 @@ find_package(Protobuf REQUIRED)
 message("Looking for grpc")
 find_package(gRPC CONFIG REQUIRED)
 find_package(Threads)
+
 #message("Looking for boost-log")
 #find_package(Boost COMPONENTS log log_setup REQUIRED)
 #
@@ -53,4 +54,5 @@ target_link_libraries(TimeTracker
         gRPC::grpc
         gRPC::grpc++
         Threads::Threads
+        version.lib
 )
