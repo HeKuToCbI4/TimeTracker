@@ -68,7 +68,7 @@ void FrameInfoServiceImpl::SendFrameInfo(bool isAfk, bool last) {
     frameInfo.set_id(snapshot->id);
     frameInfo.set_utc_timestamp(snapshot->utc_timestamp);
     std::lock_guard<std::mutex> guard(this->map_guard_mutex);
-    std::cout << "Sending frame: " << frameInfo.id() << std::endl;
+    // std::cout << "Sending frame: " << frameInfo.id() << std::endl;
     for (auto it = this->writersMap.begin(); it != this->writersMap.end(); it++) {
         auto consumer_id = it->first;
         auto writer = it->second;
@@ -112,7 +112,7 @@ bool FrameInfoServiceImpl::IsAfk() {
     GetLastInputInfo(&last_input);
     auto tick_count = GetTickCount();
     auto elapsed = tick_count - last_input.dwTime;
-    std::cout << "Time elapsed since last input [ms]: " << elapsed << std::endl;
+    // std::cout << "Time elapsed since last input [ms]: " << elapsed << std::endl;
     if (elapsed > this->afk_timeout) {
         std::cout << "AFK detected!" << std::endl;
         return true;
